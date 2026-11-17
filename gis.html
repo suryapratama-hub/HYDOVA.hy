@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% block title %}GIS & Potensi Genangan | HYDOVA{% endblock %}{% block content %}
+<div class="page-heading"><div><h1>GIS & potensi relatif genangan</h1><p>Peta otomatis wilayah Indonesia dari batas administrasi, elevasi, dan hujan historis.</p></div></div>
+<div class="alert warning">Hasil merupakan indeks screening relatif, bukan kedalaman genangan, bukan peta bahaya resmi, dan bukan pengganti simulasi hidraulik.</div>
+{% if not gis_available %}<div class="panel"><h3>Komponen GIS belum tersedia</h3><p>{{ gis_error }}</p><p>Pasang dependensi GIS sesuai requirements.txt. Jika instalasi Windows gagal, gunakan Python 3.11/3.12.</p></div>{% else %}
+<div class="panel"><div class="form-grid two">
+<label>Provinsi<select id="province"><option value="">Memuat provinsi...</option></select></label>
+<label>Kabupaten/Kota<select id="area"><option value="Seluruh provinsi">Seluruh provinsi</option></select></label>
+<label>Awal data hujan historis<input type="date" id="rain-start"></label><label>Akhir data hujan historis<input type="date" id="rain-end"></label>
+</div><p class="muted">Periode historis dibatasi sampai beberapa hari sebelum hari ini untuk mengurangi risiko data reanalisis yang belum tersedia.</p>
+<button class="btn primary" id="run-gis">Buat peta otomatis</button><div id="gis-status" class="status"></div></div>
+<div id="gis-output" class="panel hidden"><h2 id="gis-area-title">Hasil analisis</h2><div class="metric-grid compact" id="gis-metrics"></div><h3>Peta indeks potensi relatif</h3><div id="gis-map"></div>
+<h3>Ringkasan luas kelas area</h3><div id="gis-area-table"></div><h3>Data curah hujan historis</h3><div id="gis-rain-table"></div>
+<div class="toolbar"><a class="btn secondary" href="{{ url_for('download_gis_tif') }}">Unduh raster indeks (GeoTIFF)</a><button class="btn secondary" id="download-samples">Unduh titik analisis (CSV)</button><button class="btn secondary" id="download-rain">Unduh hujan historis (CSV)</button></div>
+<p class="muted" id="gis-sources"></p><div class="alert info">Indeks merupakan screening relatif dari elevasi, relief lokal, dan akumulasi hujan. GeoTIFF adalah interpolasi visual dari titik sampling, bukan model genangan tervalidasi. Hujan diambil dari satu titik representatif wilayah dan diterapkan sebagai faktor regional.</div></div>
+{% endif %}{% endblock %}
+{% block scripts %}<script src="{{ url_for('static',filename='js/gis.js') }}"></script>{% endblock %}

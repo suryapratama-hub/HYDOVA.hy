@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block title %}Debit Banjir | HYDOVA{% endblock %}{% block content %}
+<div class="page-heading"><div><h1>Estimasi debit banjir rencana</h1><p>Metode Rasional: <b>Q = 0,278 × C × I × A</b>.</p></div></div>
+<div class="panel"><form method="post" class="form-grid three">
+<label>Luas DAS (km²)<input type="number" name="area" min="0.001" step="0.001" value="{{ area }}" required></label>
+<label>Koefisien limpasan C<input type="number" name="runoff" min="0" max="1" step="0.01" value="{{ runoff }}" required></label>
+<label>Durasi hujan / waktu konsentrasi (jam)<input type="number" name="duration" min="0.1" step="0.1" value="{{ duration }}" required></label>
+<label>Stasiun sumber hujan<select name="station">{% for s in stations %}<option {% if s==station %}selected{% endif %}>{{ s }}</option>{% endfor %}</select></label>
+<label>Distribusi frekuensi<select name="distribution">{% for d in ['Gumbel','Log Pearson III','Normal','Log Normal'] %}<option {% if d==distribution %}selected{% endif %}>{{ d }}</option>{% endfor %}</select></label>
+<div class="form-actions"><button class="btn primary">Hitung debit banjir</button></div></form>
+{% if not stations %}<div class="empty">Tambahkan data hujan melalui Dashboard untuk menghitung debit rencana.</div>{% endif %}
+{% if result %}<div class="highlight"><span>Debit Q{{ result.period }}</span><b>{{ "%.3f"|format(result.peak) }} m³/det</b></div>
+<h3>Hasil perhitungan</h3><div class="table-wrap"><table><thead><tr><th>Periode ulang (tahun)</th><th>Hujan rencana (mm)</th><th>Intensitas (mm/jam)</th><th>Debit (m³/det)</th></tr></thead><tbody>{% for r in result.rows %}<tr><td>{{ r['Periode ulang (tahun)'] }}</td><td>{{ "%.2f"|format(r['Hujan rencana (mm)']) }}</td><td>{{ "%.2f"|format(r['Intensitas (mm/jam)']) }}</td><td>{{ "%.3f"|format(r['Debit (m³/det)']) }}</td></tr>{% endfor %}</tbody></table></div><script>window.floodRows={{ result.rows|tojson }};</script><div class="chart-wrap"><canvas id="floodChart"></canvas></div><p class="muted">Intensitas dihitung dari hujan rencana dibagi durasi yang dimasukkan; ini pendekatan sederhana, bukan kurva IDF.</p>{% endif %}</div>{% endblock %}

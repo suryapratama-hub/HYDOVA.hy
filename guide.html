@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block title %}Panduan | HYDOVA{% endblock %}{% block content %}
+<div class="page-heading"><div><h1>Panduan penggunaan & metodologi</h1><p>Petunjuk singkat untuk menggunakan modul HYDOVA.</p></div></div>
+<div class="panel guide">
+<h3>1. Format data hujan</h3><p>File Excel/CSV harus memiliki tiga kolom berikut. Nama alternatif Bahasa Indonesia juga diterima.</p>
+<div class="table-wrap"><table><thead><tr><th>date</th><th>station</th><th>rainfall_mm</th></tr></thead><tbody><tr><td>2020-01-01</td><td>Stasiun Magelang</td><td>12.5</td></tr><tr><td>2020-01-02</td><td>Stasiun Magelang</td><td>0</td></tr></tbody></table></div>
+<p>Satu baris adalah satu observasi harian pada satu stasiun. Jika tanggal dan stasiun sama, data baru akan memperbarui data lama.</p>
+<h3>2. Analisis frekuensi</h3><p>Data harian diringkas menjadi maksimum untuk setiap tahun kalender dan stasiun. Minimal 5 tahun diperlukan; 10–30 tahun atau lebih dianjurkan. Distribusi: Normal, Log Normal, Gumbel, dan Log Pearson III.</p>
+<h3>3. Debit banjir</h3><p><b>Q = 0,278 × C × I × A</b>. Intensitas dihitung sebagai hujan rencana dibagi durasi/waktu konsentrasi. Untuk perencanaan, gunakan kurva IDF lokal dan periksa kesesuaian metode terhadap karakteristik DAS.</p>
+<h3>4. GIS dan peta otomatis</h3><p>Pilih provinsi dan kabupaten/kota. HYDOVA mengambil batas administrasi dari geoBoundaries, elevasi Copernicus DEM GLO-90 melalui Open-Meteo, dan hujan historis reanalisis Open-Meteo.</p>
+<p>Peta menampilkan zona hasil interpolasi indeks screening relatif berdasarkan elevasi, relief lokal, dan akumulasi hujan. Titik sampling digunakan sebagai masukan perhitungan dan tidak ditampilkan sebagai marker.</p>
+<div class="alert warning">Indeks ini bukan kedalaman genangan, bukan peta bahaya resmi, dan tidak menggantikan pemodelan hidraulik 1D/2D. Periksa sumber, tahun, resolusi, lisensi, dan keterbatasan data.</div>
+<h3>5. Cakupan Indonesia</h3><p>Batas provinsi dan kabupaten/kota diambil online dari geoBoundaries. Data hujan observasi dapat dimasukkan untuk stasiun mana pun di Indonesia. Data Open-Meteo bersifat reanalisis/model, bukan pengamatan langsung BMKG.</p>
+<h3>6. Database</h3><p>Database SQLite <code>hydova.db</code> dibuat otomatis saat aplikasi pertama kali dijalankan dan menyimpan data observasi.</p>
+<a class="btn secondary" href="{{ url_for('sample_csv') }}">Unduh contoh CSV</a>
+</div>{% endblock %}

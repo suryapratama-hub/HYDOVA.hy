@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block title %}Analisis Frekuensi | HYDOVA{% endblock %}{% block content %}
+<div class="page-heading"><div><h1>Analisis frekuensi hujan</h1><p>Analisis maksimum tahunan dan hujan rencana berdasarkan distribusi probabilitas.</p></div></div>
+<div class="panel"><form method="post" class="form-grid three">
+<label>Stasiun analisis<select name="station" required>{% for s in stations %}<option {% if s==station %}selected{% endif %}>{{ s }}</option>{% endfor %}</select></label>
+<label>Distribusi<select name="distribution">{% for d in ['Normal','Log Normal','Gumbel','Log Pearson III'] %}<option {% if d==distribution %}selected{% endif %}>{{ d }}</option>{% endfor %}</select></label><div class="form-actions"><button class="btn primary">Hitung hujan rencana</button></div></form>
+{% if not stations %}<div class="empty">Masukkan data hujan terlebih dahulu melalui Dashboard.</div>{% endif %}
+{% if annual %}<h3>Maksimum tahunan · {{ annual|length }} tahun</h3><div class="table-wrap"><table><thead><tr><th>Tahun</th><th>Maksimum tahunan (mm)</th></tr></thead><tbody>{% for r in annual %}<tr><td>{{ r.year }}</td><td>{{ "%.2f"|format(r.rain) }}</td></tr>{% endfor %}</tbody></table></div>{% endif %}
+{% if result %}<h3>Parameter distribusi</h3><div class="stat-list">{% for k,v in result.params.items() %}<div><span>{{ k }}</span><b>{{ "%.5f"|format(v) }}</b></div>{% endfor %}</div>
+<h3>Hujan rencana</h3><div class="table-wrap"><table><thead><tr><th>Periode ulang (tahun)</th><th>Peluang tidak terlampaui</th><th>Hujan rencana (mm)</th></tr></thead><tbody>{% for r in result.rows %}<tr><td>{{ r['Periode ulang (tahun)'] }}</td><td>{{ "%.4f"|format(r['Peluang tidak terlampaui']) }}</td><td>{{ "%.2f"|format(r['Hujan rencana (mm)']) }}</td></tr>{% endfor %}</tbody></table></div>
+<div class="chart-wrap"><canvas id="frequencyChart"></canvas></div><script>window.frequencyRows={{ result.rows|tojson }};</script>
+<h3>Uji kesesuaian Kolmogorov–Smirnov</h3><div class="stat-list">{% for k,v in result.fit.items() %}<div><span>{{ k }}</span><b>{{ v }}</b></div>{% endfor %}</div><p class="muted">P-value K-S standar bersifat indikatif karena parameter distribusi diestimasi dari sampel.</p>{% endif %}
+</div>{% endblock %}

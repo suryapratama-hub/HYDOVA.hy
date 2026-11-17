@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="id"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}HYDOVA{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head><body>
+<aside class="sidebar">
+ <a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-icon">🌧️</span><span><b>HYDOVA</b><small>Hydrological Intelligence</small></span></a>
+ <div class="nav-label">NAVIGASI UTAMA</div>
+ <nav>
+  <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint=='dashboard' %}active{% endif %}">▦ Dashboard</a>
+  <a href="{{ url_for('frequency') }}" class="{% if request.endpoint=='frequency' %}active{% endif %}">∿ Analisis Frekuensi</a>
+  <a href="{{ url_for('flood') }}" class="{% if request.endpoint=='flood' %}active{% endif %}">≈ Debit Banjir</a>
+  <a href="{{ url_for('gis') }}" class="{% if request.endpoint=='gis' %}active{% endif %}">⌖ GIS & Potensi Genangan</a>
+  <a href="{{ url_for('guide') }}" class="{% if request.endpoint=='guide' %}active{% endif %}">▤ Panduan</a>
+ </nav>
+ <div class="sidebar-foot"><b>Cakupan wilayah</b><br>Seluruh Indonesia<br><br><span>●</span> Build 3.0 · Flask Edition</div>
+</aside>
+<main class="main">
+ <header class="hero"><div class="hero-mark">🌧️</div><div><div class="hero-title">HYDOVA</div><div class="hero-sub">Hydrological Data &amp; Observation Intelligence Platform</div><span class="hero-tag">RAINFALL · RUNOFF · SPATIAL INSIGHT</span></div></header>
+ {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<section class="flash-wrap">{% for category,message in messages %}<div class="alert {{ category }}">{{ message }}</div>{% endfor %}</section>{% endif %}{% endwith %}
+ {% block content %}{% endblock %}
+ <footer>HYDOVA · Academic project · Hydrological Data &amp; Observation Intelligence Platform</footer>
+</main>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body></html>
