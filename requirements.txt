@@ -1,0 +1,11 @@
+flask
+gunicorn
+requests
+numpy
+pandas
+scipy
+openpyxl
+geopandas
+shapely
+pyproj
+rasterio
